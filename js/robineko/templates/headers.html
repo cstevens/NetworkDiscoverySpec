@@ -1,0 +1,25 @@
+<!-- 
+  XXX missing: publishDate
+-->
+<script type='application/x-tt' id='robineko-headers'><![CDATA[
+  <div class='head'>
+    <h1 class='title' id='title'>Report: <span class='subtitle'>[% title %]</span></h1>
+    <div class='metadata'>
+      [% INCLUDE "show-people" people = editors %], [% dashDate %]
+    </div>
+  </div>
+[% BLOCK "show-people" %]
+  [% FOREACH p IN people %]
+    [%- IF p.url.length > 0 %]<a class='name' href='[% p.url %]'>[% p.name %]</a>[% ELSE %]<span class='name'>[% p.name %]</span>[% END -%]
+    [%- IF p.company %], 
+      [% IF p.companyURL %]
+        <a class='company' href='[% p.companyURL %]'>[% p.company %]</a>
+      [% ELSE %]
+        <span class='company'>[% p.company %]</span>
+      [% END %]
+    [% END %]
+    [% IF p.mailto %] &lt;<a class='email' href='mailto:[% p.mailto %]'>[% p.mailto %]</a>>[% END %]
+    [% IF p.note %] ([% p.note %])[% END %]
+  [% END %]
+[% END %]
+</script>

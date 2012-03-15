@@ -1,0 +1,167 @@
+<script type='application/x-tt' id='webidl-attribute'><![CDATA[
+<dt id="widl-[% parentId %]-[% refId %]">
+  <code>[% name %]</code>
+  of type
+  [% IF idlType.array %]array of[% END %]
+  <span class="idlAttrType">[% htmlType %]</span>[% IF readonly %], readonly[% END %][% IF idlType.nullable %], nullable[% END %]
+</dt>
+<dd>
+  [% description %]
+  [% IF raises.length == 0 %]
+    <div><em>No exceptions.</em></div>
+  [% ELSE %]
+    <table class='exceptions'>
+      <tr><th>Exception</th><th>On Get</th><th>On Set</th><th>Description</th></tr>
+      [% FOREACH exc IN raises %]
+        <tr>
+          <td class="excName">[% exc.name %]</td>
+          [% IF exc.onGet %]
+            <td class="excGetSetTrue">&#x2714;</td>
+          [% ELSE %]
+            <td class="excGetSetFalse">&#x2718;</td>
+          [% END %]
+          [% IF exc.onSet %]
+            <td class="excGetSetTrue">&#x2714;</td>
+          [% ELSE %]
+            <td class="excGetSetFalse">&#x2718;</td>
+          [% END %]
+          <td class="excDesc">
+            [% IF exc.type == 'simple' %]
+              [% exc.description %]
+            [% ELSE %]
+              <table class='exceptionCodes'>
+              [% FOREACH code IN exc.description %]
+                <tr>
+                  <td class='excCodeName'><code>[% code.name %]</code></td>
+                  <td class='excCodeDesc'>[% code.description %]</td>
+                </tr>
+              [% END %]
+              </table>
+            [% END %]
+          </td>
+        </tr>
+      [% END %]
+    </table>
+  [% END %]
+</dd>
+]]></script>
+
+<script type='application/x-tt' id='webidl-const'><![CDATA[
+<dt id="widl-[% parentId %]-[% refId %]">
+  <code>[% name %]</code>
+  of type
+  <span class="idlConstType">[% htmlType %]</span>
+</dt>
+<dd>
+  [% description %]
+</dd>
+]]></script>
+
+<script type='application/x-tt' id='webidl-exception'><![CDATA[
+  <p>Template webidl-exception called</p>
+]]></script>
+
+<script type='application/x-tt' id='webidl-field'><![CDATA[
+<dt id="widl-[% parentId %]-[% refId %]">
+  <code>[% name %]</code>
+  of type
+  <span class="idlFieldType">[% htmlType %]</span>[% IF idlType.nullable %], nullable[% END %]
+</dt>
+<dd>
+  [% description %]
+</dd>
+]]></script>
+
+<script type='application/x-tt' id='webidl-operation'><![CDATA[
+<dt id="widl-[% parentId %]-[% refId %]">
+  <code>[% name %]</code>
+</dt>
+<dd>
+  [% description %]
+  [% IF arguments.length == 0 %]
+  <div><em>No Parameters.</em></div>
+  [% ELSE %]
+  <table class="parameters">
+    <tr><th>Parameter</th><th>Type</th><th>Nullable</th><th>Optional</th><th>Description</th></th>
+    [% FOREACH param IN arguments %]
+    <tr>
+      <td class="prmName">[% param.name %]</td>
+      <td class="prmType"><code>[% param.htmlType %]</code></td>
+      [% IF param.type.nullable %]
+        <td class="prmNullTrue">&#x2714;</td>
+      [% ELSE %]
+        <td class="prmNullFalse">&#x2718;</td>
+      [% END %]
+      [% IF param.optional %]
+        <td class="prmOptTrue">&#x2714;</td>
+      [% ELSE %]
+        <td class="prmOptFalse">&#x2718;</td>
+      [% END %]
+      <td class="prmDesc">[% param.description %]</td>
+    </tr>
+    [% END %]
+  </table>
+  [% END %]
+  [% IF raises.length == 0 %]
+  <div><em>No exceptions.</em></div>
+  [% ELSE %]
+  <table class='exceptions'>
+    <tr><th>Exception</th><th>Description</th></tr>
+    [% FOREACH exc IN raises %]
+    <tr>
+      <td class="excName">[% exc.name %]</td>
+      <td class="excDesc">
+        [% IF exc.type == 'simple' %]
+        [% exc.description %]
+        [% ELSE %]
+          <table class='exceptionCodes'>
+          [% FOREACH code IN exc.description %]
+            <tr>
+              <td class='excCodeName'><code>[% code.name %]</code></td>
+              <td class='excCodeDesc'>[% code.description %]</td>
+            </tr>
+          [% END %]
+          </table>
+        [% END %]
+      </td>
+    </tr>
+    [% END %]
+  </table>
+  [% END %]
+  <div>
+    <em>Return type:</em> <code>[% htmlType %]</code>
+  </div>
+</dd>
+]]></script>
+
+<script type='application/x-tt' id='webidl-implements'><![CDATA[
+<div class='idlImplementsDesc'>
+  [% IF description.length > 0 %]
+    [% description %]
+  [% ELSE %]
+    <p>
+      All instances of the
+      <code><a>[% target %]</a></code>
+      type are defined to also implement the
+      <a class='idlType'>[% htmlType %]</a>
+      interface.
+    </p>
+  [% END %]
+</div>
+]]></script>
+
+<script type='application/x-tt' id='webidl-typedef'><![CDATA[
+  <div class='idlTypedefDesc'>
+    [% IF description.length > 0 %]
+      [% description %]
+    [% ELSE %]
+      Throughout this specification, the identifier
+      <span class='idlTypedefID'>[% name %]</span>
+      is used to refer to the
+      [% IF idlType.array %] array of [% END %]
+      <span class='idlTypedefType'>[% htmlType %]</span>
+      [% IF idlType.nullable %](nullable)[% END %]
+      type.
+    [% END %]
+  </div>
+]]></script>

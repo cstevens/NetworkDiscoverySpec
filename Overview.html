@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Networked Service Discovery and Messaging</title>
+    <meta http-equiv='Content-Type' content='text/html;charset=utf-8'/>
+    <!-- This spec has been compiled with ReSpec v2 -->
+    <script type="text/javascript" class='remove'>
+      var respecConfig = {
+          specStatus: "unofficial",
+          shortName:  "discovery",
+          edDraftURI: "http://dev.w3.org/2009/dap/discovery/",
+          editors: [
+                {   name:       "Rich Tibbett",
+                    //url:        "http://richt.me/",
+                    company:    "Opera Software ASA",
+                    companyURL: "http://opera.com/" },
+                {   name:       "Clarke Stevens",
+                    //url:      "",
+                    company:    "CableLabs",
+                    companyURL: "http://cablelabs.com/"
+                }
+          ],
+          //extraCSS:             ["./css/respec2.css"],
+          noIDLIn:  true,
+
+          wg:           "Device APIs and Policy Working Group",
+          wgURI:        "http://www.w3.org/2009/dap/",
+          wgPublicList: "public-device-apis",
+          wgPatentURI:  "http://www.w3.org/2004/01/pp-impl/43696/status",
+      };
+    </script>
+
+    <style type="text/css">
+      /**
+       * SyntaxHighlighter
+       * http://alexgorbatchev.com/SyntaxHighlighter
+       *
+       * SyntaxHighlighter is donationware. If you are using it, please donate.
+       * http://alexgorbatchev.com/SyntaxHighlighter/donate.html
+       *
+       * @version
+       * 3.0.83 (July 02 2010)
+       *
+       * @copyright
+       * Copyright (C) 2004-2010 Alex Gorbatchev.
+       *
+       * @license
+       * Dual licensed under the MIT and GPL licenses.
+       */
+      .syntaxhighlighter a,
+      .syntaxhighlighter div,
+      .syntaxhighlighter code,
+      .syntaxhighlighter table,
+      .syntaxhighlighter table td,
+      .syntaxhighlighter table tr,
+      .syntaxhighlighter table tbody,
+      .syntaxhighlighter table thead,
+      .syntaxhighlighter table caption,
+      .syntaxhighlighter textarea {
+        -moz-border-radius: 0 0 0 0 !important;
+        -webkit-border-radius: 0 0 0 0 !important;
+        background: none !important;
+        border: 0 !important;
+        bottom: auto !important;
+        float: none !important;
+        height: auto !important;
+        left: auto !important;
+        line-height: 1.1em !important;
+        margin: 0 !important;
+        outline: 0 !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        position: static !important;
+        right: auto !important;
+        text-align: left !important;
+        top: auto !important;
+        vertical-align: baseline !important;
+        width: auto !important;
+        box-sizing: content-box !important;
+        font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
+        font-weight: normal !important;
+        font-style: normal !important;
+        font-size: 1em !important;
+        min-height: inherit !important;
+        min-height: auto !important;
+      }
+
+      .syntaxhighlighter {
+        width: 100% !important;
+        margin: 1em 0 1em 0 !important;
+        position: relative !important;
+        overflow: auto !important;
+        font-size: 0.8em !important;
+      }
+      .syntaxhighlighter.source {
+        overflow: hidden !important;
+      }
+      .syntaxhighlighter .bold {
+        font-weight: bold !important;
+      }
+      .syntaxhighlighter .italic {
+        font-style: italic !important;
+      }
+      .syntaxhighlighter .line {
+        white-space: pre !important;
+      }
+      .syntaxhighlighter table {
+        width: 100% !important;
+      }
+      .syntaxhighlighter table caption {
+        text-align: left !important;
+        padding: .5em 0 0.5em 1em !important;
+      }
+      .syntaxhighlighter table td.code {
+        width: 100% !important;
+      }
+      .syntaxhighlighter table td.code .container {
+        position: relative !important;
+      }
+      .syntaxhighlighter table td.code .container textarea {
+        box-sizing: border-box !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+
+        padding-left: 1em !important;
+        overflow: hidden !important;
+        white-space: pre !important;
+      }
+      .syntaxhighlighter table td.gutter .line {
+        text-align: right !important;
+        padding: 0 0.5em 0 1em !important;
+      }
+      .syntaxhighlighter table td.code .line {
+        padding: 0 1em !important;
+      }
+      .syntaxhighlighter.nogutter td.code .container textarea, .syntaxhighlighter.nogutter td.code .line {
+        padding-left: 0em !important;
+      }
+      .syntaxhighlighter.show {
+        display: block !important;
+      }
+      .syntaxhighlighter.collapsed table {
+        display: none !important;
+      }
+      .syntaxhighlighter.collapsed .toolbar {
+        padding: 0.1em 0.8em 0em 0.8em !important;
+        font-size: 1em !important;
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+      }
+      .syntaxhighlighter.collapsed .toolbar span {
+        display: inline !important;
+        margin-right: 1em !important;
+      }
+      .syntaxhighlighter.collapsed .toolbar span a {
+        padding: 0 !important;
+        display: none !important;
+      }
+      .syntaxhighlighter.collapsed .toolbar span a.expandSource {
+        display: inline !important;
+      }
+      .syntaxhighlighter .toolbar {
+        position: absolute !important;
+        right: 1px !important;
+        top: 1px !important;
+        width: 11px !important;
+        height: 11px !important;
+        font-size: 10px !important;
+        z-index: 10 !important;
+      }
+      .syntaxhighlighter .toolbar span.title {
+        display: inline !important;
+      }
+      .syntaxhighlighter .toolbar a {
+        display: block !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        padding-top: 1px !important;
+      }
+      .syntaxhighlighter .toolbar a.expandSource {
+        display: none !important;
+      }
+      .syntaxhighlighter.ie {
+        font-size: .9em !important;
+        padding: 1px 0 1px 0 !important;
+      }
+      .syntaxhighlighter.ie .toolbar {
+        line-height: 8px !important;
+      }
+      .syntaxhighlighter.ie .toolbar a {
+        padding-top: 0px !important;
+      }
+      .syntaxhighlighter.printing .line.alt1 .content,
+      .syntaxhighlighter.printing .line.alt2 .content,
+      .syntaxhighlighter.printing .line.highlighted .number,
+      .syntaxhighlighter.printing .line.highlighted.alt1 .content,
+      .syntaxhighlighter.printing .line.highlighted.alt2 .content {
+        background: none !important;
+      }
+      .syntaxhighlighter.printing .line .number {
+        color: #bbbbbb !important;
+      }
+      .syntaxhighlighter.printing .line .content {
+        color: black !important;
+      }
+      .syntaxhighlighter.printing .toolbar {
+        display: none !important;
+      }
+      .syntaxhighlighter.printing a {
+        text-decoration: none !important;
+      }
+      .syntaxhighlighter.printing .plain, .syntaxhighlighter.printing .plain a {
+        color: black !important;
+      }
+      .syntaxhighlighter.printing .comments, .syntaxhighlighter.printing .comments a {
+        color: #008200 !important;
+      }
+      .syntaxhighlighter.printing .string, .syntaxhighlighter.printing .string a {
+        color: blue !important;
+      }
+      .syntaxhighlighter.printing .keyword {
+        color: #006699 !important;
+        font-weight: bold !important;
+      }
+      .syntaxhighlighter.printing .preprocessor {
+        color: gray !important;
+      }
+      .syntaxhighlighter.printing .variable {
+        color: #aa7700 !important;
+      }
+      .syntaxhighlighter.printing .value {
+        color: #009900 !important;
+      }
+      .syntaxhighlighter.printing .functions {
+        color: #ff1493 !important;
+      }
+      .syntaxhighlighter.printing .constants {
+        color: #0066cc !important;
+      }
+      .syntaxhighlighter.printing .script {
+        font-weight: bold !important;
+      }
+      .syntaxhighlighter.printing .color1, .syntaxhighlighter.printing .color1 a {
+        color: gray !important;
+      }
+      .syntaxhighlighter.printing .color2, .syntaxhighlighter.printing .color2 a {
+        color: #ff1493 !important;
+      }
+      .syntaxhighlighter.printing .color3, .syntaxhighlighter.printing .color3 a {
+        color: red !important;
+      }
+      .syntaxhighlighter.printing .break, .syntaxhighlighter.printing .break a {
+        color: black !important;
+      }
+    </style>
+    <style type="text/css">
+      /**
+       * SyntaxHighlighter
+       * http://alexgorbatchev.com/SyntaxHighlighter
+       *
+       * SyntaxHighlighter is donationware. If you are using it, please donate.
+       * http://alexgorbatchev.com/SyntaxHighlighter/donate.html
+       *
+       * @version
+       * 3.0.83 (July 02 2010)
+       *
+       * @copyright
+       * Copyright (C) 2004-2010 Alex Gorbatchev.
+       *
+       * @license
+       * Dual licensed under the MIT and GPL licenses.
+       */
+      .syntaxhighlighter {
+        background-color: none !important;
+      }
+      .syntaxhighlighter .line.alt1 {
+        background-color: none !important;
+      }
+      .syntaxhighlighter .line.alt2 {
+        background-color: none !important;
+      }
+      .syntaxhighlighter .line.highlighted.alt1, .syntaxhighlighter .line.highlighted.alt2 {
+        background-color: none !important;
+      }
+      .syntaxhighlighter .line.highlighted.number {
+        color: black !important;
+      }
+      .syntaxhighlighter table caption {
+        color: black !important;
+      }
+      .syntaxhighlighter .gutter {
+        color: #afafaf !important;
+      }
+      .syntaxhighlighter .gutter .line {
+        border-right: 3px solid #6ce26c !important;
+      }
+      .syntaxhighlighter .gutter .line.highlighted {
+        background-color: #6ce26c !important;
+        color: white !important;
+      }
+      .syntaxhighlighter.printing .line .content {
+        border: none !important;
+      }
+      .syntaxhighlighter.collapsed {
+        overflow: visible !important;
+      }
+      .syntaxhighlighter.collapsed .toolbar {
+        color: blue !important;
+        background: none !important;
+        border: 1px solid #6ce26c !important;
+      }
+      .syntaxhighlighter.collapsed .toolbar a {
+        color: blue !important;
+      }
+      .syntaxhighlighter.collapsed .toolbar a:hover {
+        color: red !important;
+      }
+      .syntaxhighlighter .toolbar {
+        color: white !important;
+        background: #6ce26c !important;
+        border: none !important;
+      }
+      .syntaxhighlighter .toolbar a {
+        color: white !important;
+      }
+      .syntaxhighlighter .toolbar a:hover {
+        color: black !important;
+      }
+      .syntaxhighlighter .plain, .syntaxhighlighter .plain a {
+        color: black !important;
+      }
+      .syntaxhighlighter .comments, .syntaxhighlighter .comments a {
+        color: #008200 !important;
+      }
+      .syntaxhighlighter .string, .syntaxhighlighter .string a {
+        color: blue !important;
+      }
+      .syntaxhighlighter .keyword {
+        color: #006699 !important;
+      }
+      .syntaxhighlighter .preprocessor {
+        color: gray !important;
+      }
+      .syntaxhighlighter .variable {
+        color: #aa7700 !important;
+      }
+      .syntaxhighlighter .value {
+        color: #009900 !important;
+      }
+      .syntaxhighlighter .functions {
+        color: #ff1493 !important;
+      }
+      .syntaxhighlighter .constants {
+        color: #0066cc !important;
+      }
+      .syntaxhighlighter .script {
+        font-weight: bold !important;
+        color: #006699 !important;
+        background-color: none !important;
+      }
+      .syntaxhighlighter .color1, .syntaxhighlighter .color1 a {
+        color: gray !important;
+      }
+      .syntaxhighlighter .color2, .syntaxhighlighter .color2 a {
+        color: #ff1493 !important;
+      }
+      .syntaxhighlighter .color3, .syntaxhighlighter .color3 a {
+        color: red !important;
+      }
+
+      .syntaxhighlighter .keyword {
+        font-weight: bold !important;
+      }
+    </style>
+    <script src="tools/syntaxhighlighter/js/shCore.js" type="text/javascript" class='remove'></script>
+    <script src="tools/syntaxhighlighter/js/shAutoloader.js" type="text/javascript" class='remove'></script>
+    <script src="tools/syntaxhighlighter/js/shBrushXml.js" type="text/javascript" class='remove'></script>
+    <script src="tools/syntaxhighlighter/js/shBrushJScript.js" type="text/javascript" class='remove'></script>
+
+    <script src='./js/profiles/w3c-common-loader.js' type="text/javascript" class='remove'></script>
+    <style type="text/css">
+      /* Custom CSS optimizations (Richard Tibbett) */
+
+      /* Add better spacing to sections */
+      section, .section { margin-bottom: 2em; }
+
+      /* Reduce note & issue render size */
+      .note, .issue { font-size:0.8em; }
+
+      /* Add addition spacing to <ol> and <ul> for rule definition */
+      ol.rule li, ul.rule li { padding:0.6em; }
+
+      pre.widl { border: solid thin; background: #EEEEEE; color: black; padding: 0.5em 1em; position: relative; }
+      pre.widl :link, pre.widl :visited { color: #000; background: transparent; }
+      pre.widl:before { content: "IDL"; font: bold small sans-serif; padding: 0.5em; background: white; position: absolute; top: 0; margin: -1px 0 0 -4em; width: 1.5em; border: thin solid; border-radius: 0 0 0 0.5em }
+
+      div.example { border: solid thin red; background: #F7DFE5; color: black; padding: 0.5em 1em; position: relative; margin: 1em 0 1em 4.6em; width: auto; }
+      div.example:before { content: "EXAMPLE"; font: bold small sans-serif; padding: 0.5em; background: red; color: white; position: absolute; top: 0; margin: -1px 0 0 -7.6em; width: 5em; border: thin solid red; border-radius: 0 0 0 0.5em }
+
+      dl.domintro { color: green; margin: 2em 0 2em 2em; padding: 0.5em 1em; border: none; background: #DDFFDD; }
+      hr + dl.domintro, div.impl + dl.domintro { margin-top: 2.5em; margin-bottom: 1.5em; }
+      dl.domintro dt, dl.domintro dt * { color: black; text-decoration: none; }
+      dl.domintro dd { margin: 0.5em 0 1em 2em; padding: 0; }
+      dl.domintro dd p { margin: 0.5em 0; }
+      dl.domintro code {font-size: inherit; font-style: italic; }
+      dl.domintro:before { display: table; margin: -1em -0.5em 0.5em auto; width: auto; content: 'This box is non-normative. Implementation requirements are given below this box.'; color: red; border: solid 2px; background: white; padding: 0 0.25em; }
+    </style>
+  </head>
+
+  <body>
+    <section id='abstract'>
+      <p>
+        This specification defines a mechanism for an HTML document to discover and subsequently communicate with <acronym title="Hypertext Transfer Protocol">HTTP</acronym>-based services
+        advertised via common discovery protocols within a user's network.
+      </p>
+    </section>
+
+    <section id='sotd'>
+      <p>
+        This document represents the early consensus of the group on the scope and features of the proposed
+        API.
+      </p>
+    </section>
+
+    <section class="informative">
+      <h3>Introduction</h3>
+
+      <p>To enable Web pages to connect and communicate with Local-networked Services provided over HTTP, this specification introduces the
+      <a href="#navigatornetworkservice"><code>NavigatorNetworkService</code></a> interface.</p>
+
+      <p>
+         Using this <acronym title="Application Programming Interface">API</acronym> consists of requesting a well-known service type, known by developers and advertised by Local-networked Devices. User authorization, where the user connects the web page to one or more discovered services,
+         is expected before the web page is able to interact with any Local-networked Services.
+      </p>
+
+      <p>
+         A web page creates a request to obtain connectivity to services running in the network by specifying a well-known discovery service type that it wishes to interact with.
+      </p>
+
+      <p>
+         The user agent, having captured all advertised services on the network from the Service Discovery mechanisms included in this recommendation, attempts to match
+      the requested service type to a discovered service according to the processing described herein.
+      </p>
+
+      <p>
+          If a service connectivity request is successful then the Web page is provided with the necessary information to communicate with the authorized Local-networked Service.
+          If the request fails then the Web page will receive an error callback containing an error code describing the cause of Local-networked Service connectivity failure.
+      </p>
+
+      <p>
+         Once connected to a Local-networked Service the Web page can send requests and receive responses to the Local-networked Service via the messaging format and appropriate channel inferred from the service type
+         authorized via the provided API.
+         The Web page, once connected, can also receive service-pushed events, in the messaging format supported by the Local-networked Device, if such event subscription functionality is provided by the
+         connected Local-networked Service.
+      </p>
+
+      <div class="example">
+       <p>Example of requesting a DNS-SD advertised service:</p>
+       <hr />
+       <pre class="brush:js">function showServices( servicesList ) {
+  // Show a list of all the services provided to the web page
+  for(var i in servicesList.services) console.log( servicesList.services[i].name );
+}
+
+navigator.getNetworkServices('_boxee-jsonrpc._tcp', showServices);</pre>
+      </div>
+
+      <div class="example">
+        <p>Example of requesting a UPnP advertised service, also handling error conditions:</p>
+        <hr />
+        <pre class="brush:js">function showServices( servicesList ) {
+  // Show a list of all the services provided to the web page
+  for(var i in servicesList.services) console.log( servicesList.services[i].name );
+}
+
+function error( e ) {
+  console.log( "Error occurred: " + e.code );
+}
+
+navigator.getNetworkServices('urn:schemas-upnp-org:service:ContentDirectory:1', showServices, error);</pre>
+      </div>
+
+      <div class="example">
+        <p>Example of requesting either a DNS-SD or UPnP advertised service:</p>
+        <hr />
+        <pre class="brush:js">function showServices( servicesList ) {
+  // Show a list of all the services provided to the web page (+ service type)
+  for(var i in servicesList.services)
+     console.log( servicesList.services[i].name + '(' + servicesList.services[i].type + ')' );
+}
+
+navigator.getNetworkServices([
+  '_boxee-jsonrpc._tcp',
+  'urn:schemas-upnp-org:service:ContentDirectory:1'
+], showServices);</pre>
+      </div>
+
+      <p>For more detailed examples see the <a href="#examples">Examples</a> section.
+    </section>
+
+    <section
+     id='conformance'>
+
+     <p>Requirements phrased in the imperative as part of algorithms (such as "strip any leading space characters" or "return false and abort these steps") are to be interpreted with the
+     meaning of the key word ("must", "should", "may", etc) used in introducing the algorithm.</p>
+
+     <p>
+      Some conformance requirements are phrased as requirements on attributes, methods or objects. Such requirements are to be interpreted as requirements on user agents.
+     </p>
+
+     <p>
+      Conformance requirements phrased as algorithms or specific steps may be implemented in any manner, so long as the end result is equivalent. (In particular, the algorithms defined in
+      this specification are intended to be easy to follow, and not intended to be performant.)
+     </p>
+
+     <p>
+      The only conformance class defined by this specification is user agents.
+     </p>
+
+     <p>
+      User agents may impose implementation-specific limits on otherwise unconstrained inputs, e.g. to prevent denial of service attacks, to guard against running out of memory, or to work
+      around platform-specific limitations.
+     </p>
+
+     <p>
+      When support for a feature is disabled (e.g. as an emergency measure to mitigate a security problem, or to aid in development, or for performance reasons), user agents must act as if
+      they had no support for the feature whatsoever, and as if the feature was not mentioned in this specification. For example, if a particular feature is accessed via an attribute in a Web
+      IDL interface, the attribute itself would be omitted from the objects that implement that interface - leaving the attribute on the object but making it return null or throw an exception
+      is insufficient.
+     </p>
+
+      <section>
+         <h3>Dependencies</h3>
+
+         This specification relies on several other underlying specifications.
+
+         <dl>
+            <dt>HTML</dt>
+            <dd>Many fundamental concepts from HTML are used by this specification. [[!HTML5]]</dd>
+            <dt>WebIDL</dt>
+            <dd>The IDL blocks in this specification use the semantics of the WebIDL specification. [[!WEBIDL]]</dd>
+         </dl>
+      </section>
+    </section>
+
+    <section>
+      <h3>Terminology</h3>
+
+      <p>
+         The construction "a <code>Foo</code> object", where <code>Foo</code> is actually an interface, is sometimes used instead of the more accurate "an object implementing the interface <code>Foo</code>".
+      </p>
+
+      <p>
+         The term DOM is used to refer to the API set made available to scripts in Web applications, and does not necessarily imply the existence of an actual <code>Document</code> object or of any
+         other <code>Node</code> objects as defined in the DOM Core specifications. [[!DOM-CORE]]
+      </p>
+
+      <p>
+         An IDL attribute is said to be <em>getting</em> when its value is being retrieved (e.g. by author script), and is said to be <em>setting</em> when a new value is assigned to it.
+      </p>
+
+      <p>
+        A <dfn>valid service type</dfn> is a string that only uses characters in the ranges U+0021, U+0023 to U+0027, U+002A to U+002B, U+002D to U+002E, U+0030 to U+0039, U+0041 to U+005A, U+005E to U+007E.
+      </p>
+
+      <p>
+        A <a>valid service type</a> provided in the <code>type</code> attribute of the <code>getNetworkServices()</code> method will be matched against the services currently contained in the <a>list of available service records</a> according to the algorithms defined in this specification.
+      </p>
+    </section>
+
+    <section>
+     <h2>Requesting networked services</h2>
+
+
+<pre class="widl">[Supplemental, NoInterfaceObject]
+interface <dfn id="navigatornetworkservice">NavigatorNetworkService</dfn> {
+  // Obtain a Local-networked Service
+  void <a href="#dom-navigator-getnetworkservices">getNetworkServices</a>( in any type,
+                           in <a href="#navigatornetworkservicesuccesscallback">NavigatorNetworkServiceSuccessCallback</a> successCallback,
+                           in optional <a href="#navigatornetworkserviceerrorcallback">NavigatorNetworkServiceErrorCallback</a> errorCallback );
+};
+<a class="externalDFN" href="http://www.whatwg.org/specs/web-apps/current-work/complete/timers.html#navigator">Navigator</a> implements <a href="#navigatornetworkservice">NavigatorNetworkService</a>;
+
+[Callback=FunctionOnly, NoInterfaceObject]
+interface <dfn id="navigatornetworkservicesuccesscallback">NavigatorNetworkServiceSuccessCallback</dfn> {
+  void handleEvent( in <a href="#networkservices">NetworkServices</a> services );
+};
+
+[NoInterfaceObject]
+interface <dfn id="navigatornetworkserviceerror">NavigatorNetworkServiceError</dfn> {
+  const unsigned short <a href="#dom-navigatornetworkserviceerror-permission_denied">PERMISSION_DENIED_ERR</a> = 1;
+  readonly attribute unsigned short <a href="#dom-navigatornetworkserviceerror-code">code</a>;
+};
+
+[Callback=FunctionOnly, NoInterfaceObject]
+interface <dfn id="navigatornetworkserviceerrorcallback">NavigatorNetworkServiceErrorCallback</dfn> {
+  void handleEvent( in <a href="#navigatornetworkserviceerror">NavigatorNetworkServiceError</a> error );
+};
+</pre>
+
+  <section>
+   <h2>Methods</h2>
+
+      <dl class="domintro">
+        <dt>
+          <var title="">window</var>
+           .
+          <code title="dom-navigator">
+            <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/timers.html#navigator">navigator</a>
+          </code>
+           .
+          <code title="dom-navigator-getNetworkServices">
+            <a href="#dom-navigator-getnetworkservices">getNetworkServices</a>
+          </code>
+          (
+          <var title="">type</var>
+          ,
+          <var title="">successCallback</var>
+           [,
+          <var title="">errorCallback</var>
+           ] )
+        </dt>
+        <dd>
+          <p>Prompts the user to select one or more discovered network services that have advertised support for the requested service type.</p>
+          <p>
+            The
+            <var title="">type</var>
+             argument contains one or more <a>valid service type</a> tokens that the web page would like to interact with.
+          </p>
+          <p>
+            If the user accepts, the
+            <var title="">successCallback</var>
+             is
+          invoked, with one or more
+            <code>
+              <a href="#networkservice"><code>NetworkService</code></a>
+            </code>
+             objects as
+          its argument.
+          </p>
+          <p>
+            If the user declines, the
+            <var title="">errorCallback</var>
+             (if
+          any) is invoked.
+          </p>
+        </dd>
+      </dl>
+
+       <div>
+          <p>
+            When the <dfn id="dom-navigator-getnetworkservices" title="dom-navigator-getnetworkservices"><code>getNetworkServices(type, successCallback[, errorCallback])</code></dfn> method is called, the user agent MUST run the following steps:
+          </p>
+
+          <ol class="rule">
+            <li>
+               If <var>successCallback</var> is empty or is not an object of type <code>Function</code> then the user agent MUST abort these steps.
+            </li>
+
+            <li>
+               If <var>type</var> is an array consisting of one or more <a>valid service type</a> tokens, then let <var>requested control types</var> by the value of <var>type</var>  and continue to the step labeled <em>process</em> below.
+            </li>
+
+            <li>
+               If <var>type</var> is a string consisting of one <a>valid service type</a> token, then let <var>requested control types</var> be an array containing one item with a value of <var>type</var> and continue to the step labeled <em>process</em> below.
+            </li>
+
+            <li>
+               Continue to the step labeled <em>failure</em> below.
+            </li>
+
+            <li>
+               <em>Process</em>: Let <var>services found</var> be an empty array.
+            </li>
+
+            <li>
+               For each <var>available service</var> in the <a>list of available service records</a> run the following steps:
+               <ol class="rule">
+                  <li>
+                    For each <var>requested control type</var> in <var>requested control types</var>: If <var>available service</var>'s <code>type</code> attribute equals the <var>requested control type</var> then let <var>matched service</var> equal the value of <var>available service</var> and continue at the step labeled <var>attach</var> below.
+                  </li>
+                  <li>
+                     Continue at the next <var>available service</var>.
+                  </li>
+                  <li>
+                     <em>Attach</em>: If <var>matched service</var> is not empty then run the following steps:
+
+                     <ol class="rule">
+                        <li>
+                           Let <var>new service object</var> be a new <a href="#networkservice"><code>NetworkService</code></a> object, mapping the parameters of
+                     <var>matched service</var> to this new object where possible.
+                        </li>
+                        <li>
+                           Append <var>new service object</var> to the <var>services found</var> array.
+                        </li>
+                     </ol>
+                  </li>
+               </ol>
+            </li>
+
+            <li>
+               If <var>services found</var> is an empty array, then jump to the step labeled <em>failure</em> below.
+            </li>
+
+            <li>
+               Return, and run the remaining steps asynchronously.
+            </li>
+
+            <li>
+               Optionally, e.g. based on a previously-established user preference, for security reasons, or due to platform limitations, jump to the step labeled <em>failure</em> below.
+            </li>
+
+            <li>
+                  The user agent MUST prompt the user in a user-agent-specific manner for permission to provide the
+                  <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/browsers.html#entry-script" class="externalDFN">entry script</a>'s
+                  <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/origin-0.html#origin" class="externalDFN">origin</a> with an array of
+                  <a href="#networkservice"><code>NetworkService</code></a> objects representing the user-authorized subset of <var>services found</var>.
+
+               <p>
+                  If the user grants permission to access one or more networked services then user agents SHOULD include an "ongoing local-network
+                  communication" indicator.
+               </p>
+
+               If the user denies permission, jump to the step labeled <em>failure</em> below. If the user never responds, this algorithm stalls on this step.
+
+            </li>
+
+            <li>
+               Let <var>services</var> be the array of one or more <a href="#networkservice"><code>NetworkService</code></a> objects for which the user granted permission.
+            </li>
+
+            <li>
+               For each Object <var>service</var> in <var>services</var>, run the following substeps:
+
+               <ol class="rule">
+                  <li>
+                     Add the <var>service</var>'s <code>url</code> parameter to the <a>entry script origin's <acronym title="Uniform Resource Locator">URL</acronym> whitelist</a>.
+                  </li>
+                  <li>
+                    If <var>service</var> was originally created from a UPnP discovery process and the <var>service</var>'s <code>eventsUrl</code> parameter is not empty then <a>setup a UPnP Events Subscription</a> for <var>service</var>.
+                  </li>
+               </ol>
+            </li>
+
+            <li>
+               Let <var>services manager</var> be a new <a href="#networkservices"><code>NetworkServices</code></a> object.
+            </li>
+
+            <li>
+               Set <var>services manager</var>'s <code>services</code> attribute to <var>services</var>.
+            </li>
+
+            <li>
+               Set <var>services manager</var>'s <code>servicesAvailable</code> attribute to the length of <var>services</var>.
+            </li>
+
+            <li>
+               The user agent MUST <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/webappapis.html#queue-a-task" class="externalDFN">queue a task</a> to invoke <var>successCallback</var> with
+               <var>services manager</var> as its argument.
+            </li>
+
+            <li>
+               The user agent MUST abort any remaining steps.
+            </li>
+
+            <li>
+               <em>Failure</em>: If <var>errorCallback</var> is null or is not an object of type <code>Function</code>, then the user agent MUST abort these steps.
+            </li>
+
+            <li>
+               Let <var>error</var> be a new <a href="#navigatornetworkserviceerror"><code>NavigatorNetworkServiceError</code></a> object whose
+               <a href="#dom-navigatornetworkserviceerror-code"><code>code</code></a> attribute has the numeric value 1
+               (<a href="#dom-navigatornetworkserviceerror-permission_denied"><code>PERMISSION_DENIED_ERR</code></a>).
+            </li>
+
+            <li>
+               The user agent MUST <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/webappapis.html#queue-a-task" class="externalDFN">queue a task</a> to invoke <var>errorCallback</var> with
+               <var>error</var> as its argument.
+            </li>
+
+          </ol>
+
+          <p>
+            The <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/webappapis.html#task-source" class="externalDFN">task source</a> for these
+            <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/webappapis.html#concept-task" class="externalDFN">tasks</a> is the
+            <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/webappapis.html#user-interaction-task-source" class="externalDFN">user interaction task source</a>.
+          </p>
+
+          <p>
+            When a <a href="#networkservice"><code>NetworkService</code></a> object is provided to a Web page, the user agent MUST add the <code>url</code> property
+             to the <dfn>entry script origin's URL whitelist</dfn>. This list enables the
+            Web page to override and initiate cross-site resource requests towards these URLs, and any sub-resources of these URLs, within the current
+            <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/browsers.html#entry-script" class="externalDFN">entry script</a>'s
+            <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/origin-0.html#origin" class="externalDFN">origin</a> via various existing mechanisms (e.g. Web Sockets, Server-Sent Events,
+            Web Messaging, XMLHttpRequest).
+         </p>
+
+         <p>
+            If the user navigates away from the current browsing context, the user agent MUST remove all previously whitelisted urls from the <a>entry script origin's URL whitelist</a>.
+            There is no persistence to network service selections provided to a web page. It is not possible to access a previously white-listed networked service without the necessary user authorization in all of the following cases:
+            <ul>
+              <li>If the current script is reloaded at any point in the same or different window.</li>
+              <li>if the current script reinvokes the <a href="#dom-navigator-getnetworkservices"><code>getNetworkServices()</code></a> method at any point in its execution.</li>
+              <li>If the user navigates forward or back in their history to reload the current page.</li>
+              <li>If a script is running in a different origin.</li>
+            </ul>
+         </p>
+
+      </div>
+      </section>
+
+      <section>
+         <h3>Error Handling</h3>
+
+      <dl class="domintro">
+        <dt>
+          <var title="">error</var>
+           .
+          <code title="dom-NavigatorNetworkServiceError-code">
+            <a href="#dom-navigatornetworkserviceerror-code">code</a>
+          </code>
+        </dt>
+        <dd>
+          <p>
+            Returns the current error's error code. At this time, this will always be 1, for which the constant
+            <a href="#dom-navigatornetworkserviceerror-permission_denied"><code>PERMISSION_DENIED_ERR</code></a> is defined.
+          </p>
+        </dd>
+      </dl>
+
+         <p>
+            The <dfn id="dom-navigatornetworkserviceerror-code" title="dom-navigatornetworkserviceerror-code"><code>code</code></dfn> attribute of a
+            <a href="#navigatornetworkserviceerror"><code>NavigatorNetworkServiceError</code></a> object MUST return the code for the error, which will be the following:
+         </p>
+
+         <dl>
+            <dt>
+               <dfn id="dom-navigatornetworkserviceerror-permission_denied" title="dom-navigatornetworkserviceerror-permission_denied"><code>PERMISSION_DENIED_ERR</code></dfn> (numeric value 1)
+            </dt>
+            <dd>
+               The user denied the page permission to access any networked devices.
+            </dd>
+         </dl>
+
+      </section>
+
+      </section>
+      <section>
+      <h2>Obtaining networked services</h2>
+
+      <p>
+         The <a href="#networkservices"><code>NetworkServices</code></a> interface is the top-level response object from a call to <a href="#dom-navigator-getnetworkservices"><code>getNetworkServices()</code></a> and provides a set of user-authorized <a href="#networkservice"><code>NetworkService</code></a> objects for the given request.
+      </p>
+
+<pre class="widl">
+[NoInterfaceObject]
+interface <dfn id="networkservices">NetworkServices</dfn> {
+  readonly attribute <a href="#networkservice">NetworkService</a>[] <a href="#dom-networkservices-services">services</a>;
+
+  // event handler attributes
+           attribute Function         <a href="#dom-networkservices-onserviceavailable">onserviceavailable</a>;
+           attribute Function         <a href="#dom-networkservices-onserviceunavailable">onserviceunavailable</a>;
+
+  readonly attribute unsigned short   <a href="#dom-networkservices-servicesavailable">servicesAvailable</a>;
+};
+</pre>
+
+      <section>
+      <h2>Attributes</h2>
+
+        <dl class="domintro">
+          <dt>
+            <code title="dom-networkservices-services">
+              <a href="#dom-networkservices-services">services</a>
+            </code>
+          </dt>
+          <dd>
+            <p>
+              A list of one or more <a href="#networkservice"><code>NetworkService</code></a> objects representing user-selected and
+              user-authorized service endpoints.
+            </p>
+          </dd>
+          <dt>
+            <code title="dom-networkservices-servicesavailable">
+              <a href="#dom-networkservices-servicesavailable">servicesAvailable</a>
+            </code>
+          </dt>
+          <dd>
+            <p>
+              Returns the current number of services matching one of the app-requested <a href="#dfn-valid-service-type">valid service types</a> that are actively available within the user's current network.
+            </p>
+          </dd>
+        </dl>
+
+        <p>
+          The <dfn id="dom-networkservices-services"><code>services</code></dfn> attribute MUST return the initial list of <a href="#networkservice"><code>NetworkService</code></a> objects that have been selected as part of the algorithm for <a href="#requesting-networked-services">requesting networked
+            services</a>. This object is <em>immutable</em> meaning that it cannot change without the application re-invoking the <a href="#dom-navigator-getnetworkservices"><code>getNetworkServices()</code></a> method.
+        </p>
+
+        <p>
+           Services available within the local network can connect and disconnect at different times during the execution of a web page. A <a>user agent</a> can
+           inform a web page when the state of networked services matching the requested <a>valid service type</a> change. Web pages can use this information to enable in-page experiences for communicating the state of networked services
+           with the ability to change the particular service or set of services the page is connected to by re-invoking the <a href="#dom-navigator-getnetworkservices"><code>getNetworkServices()</code></a> method.
+        </p>
+
+        <div>
+           <p>
+              The <dfn id="dom-networkservices-servicesavailable"><code>servicesAvailable</code></dfn> attribute MUST return the number of services available in the
+              user's network that match the <a>valid service type</a> that was initially used to create the current <a href="#networkservices"><code>NetworkServices</code></a> object.
+              By default, <a href="#dom-networkservices-servicesavailable"><code>servicesAvailable</code></a> MUST be set to <code>1</code>.
+           </p>
+
+           <p>
+             When a previously unknown instance of a networked service matching one or the requested <a href="#dfn-valid-service-type">valid service types</a> becomes available on the user's current network, the <a>user agent</a> MUST fire a new simple
+             event at the <a href="#dom-networkservices-onserviceavailable"><code>onserviceavailable</code></a> event handler.
+           </p>
+
+           <p>
+             When a previously known instance of a networked service matching one or the requested <a href="#dfn-valid-service-type">valid service types</a> becomes unavailable on the user's current network, the <a>user agent</a> MUST fire a new simple
+             event at the <a href="#dom-networkservices-onserviceunavailable"><code>onserviceunavailable</code></a> event handler.
+           </p>
+        </div>
+
+      </section>
+
+      <section>
+      <h2>Events</h2>
+
+      <p>
+         The following are the event handlers (and their corresponding event handler event types) that must be supported, as IDL attributes, by all objects implementing the <a href="#networkservices"><code>NetworkServices</code></a> interface:
+       </p>
+
+       <table border="1">
+        <thead>
+          <tr>
+            <th>
+              <span title="event handlers">Event handler</span>
+            </th>
+            <th>
+              <span>Event handler event type</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <dfn id="dom-networkservices-onserviceavailable" title="dom-NetworkServices-onserviceavailable">
+                <code>onserviceavailable</code>
+              </dfn>
+            </td>
+            <td>
+              <code title="event-serviceavailable">serviceavailable</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <dfn id="dom-networkservices-onserviceunavailable" title="dom-NetworkServices-onserviceunavailable">
+                <code>onserviceunavailable</code>
+              </dfn>
+            </td>
+            <td>
+              <code title="event-serviceunavailable">serviceunavailable</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+         Events with an event type of <code>serviceavailable</code> or <code>serviceunavailable</code> defined in this specification are simple <code>Event</code> objects.
+      </p>
+
+      </section>
+
+    </section>
+    <section>
+    <h2>Communicating with a networked service</h3>
+
+<p>
+   The <a href="#networkservice"><code>NetworkService</code></a> interface is used to provide a set of connection information for an HTTP service endpoint and if available, service events, running on a networked device.
+</p>
+
+<pre class="widl">
+[NoInterfaceObject]
+interface <dfn id="networkservice">NetworkService</dfn> {
+  readonly attribute DOMString        <a href="#dom-networkservice-name">name</a>;
+  readonly attribute DOMString        <a href="#dom-networkservice-type">type</a>;
+  readonly attribute DOMString        <a href="#dom-networkservice-url">url</a>;
+  readonly attribute DOMString        <a href="#dom-networkservice-config">config</a>;
+
+  const unsigned short <a href="#dom-networkservice-AVAILABLE">AVAILABLE</a>      = 1;
+  const unsigned short <a href="#dom-networkservice-UNAVAILABLE">UNAVAILABLE</a>    = 2;
+  readonly attribute unsigned short   <a href="#dom-networkservice-readystate">readyState</a>;
+
+  // event handler attributes
+           attribute Function         <a href="#dom-networkservice-onreadystatechange">onreadystatechange</a>;
+           attribute Function?        <a href="#dom-networkservice-onmessage">onmessage</a>;
+};
+<a href="#networkservice">NetworkService</a> implements <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-EventTarget" class="externalDFN">EventTarget</a>;
+</pre>
+
+<section>
+  <h2>Attributes</h2>
+
+      <dl class="domintro">
+        <dt>
+          <var title="">service</var>
+           .
+          <code title="dom-networkservice-name">
+            <a href="#dom-networkservice-name">name</a>
+          </code>
+        </dt>
+        <dd>
+          <p>
+            The name of the user-selected service.
+          </p>
+        </dd>
+        <dt>
+          <var title="">service</var>
+           .
+          <code title="dom-networkservice-type">
+            <a href="#dom-networkservice-type">type</a>
+          </code>
+        </dt>
+        <dd>
+          <p>
+            The <a>valid service type</a> token value of the user-selected service.
+          </p>
+        </dd>
+        <dt>
+          <var title="">service</var>
+           .
+          <code title="dom-networkservice-url">
+            <a href="#dom-networkservice-url">url</a>
+          </code>
+        </dt>
+        <dd>
+          <p>
+            The control URL endpoint (including any required port information) of the user-selected control service that has been added to the <a>entry script origin's URL whitelist</a>.
+          </p>
+        </dd>
+        <dt>
+          <var title="">service</var>
+           .
+          <code title="dom-networkservice-config">
+            <a href="#dom-networkservice-config">config</a>
+          </code>
+        </dt>
+        <dd>
+          <p>
+            The configuration information associated with the service depending on the requested service type.
+          </p>
+        </dd>
+      </dl>
+
+         <p>
+            The <dfn id="dom-networkservice-name"><code>name</code></dfn> attribute represents a human-readable title for the service.
+         </p>
+
+         <p>
+             The <dfn id="dom-networkservice-type"><code>type</code></dfn> attribute reflects the value of the <a>valid service type</a> of the service.
+          </p>
+
+         <p>
+            The <dfn id="dom-networkservice-url"><code>url</code></dfn> attribute is an <a href="http://www.w3.org/TR/html5/urls.html#absolute-url" class="externalDFN">absolute URL</a> pointing to the root HTTP
+            endpoint for the service that has been added to the <a>entry script origin's URL whitelist</a>. Web pages can subsequently use this value for implicit cross-document messaging via various existing mechanisms (e.g. Web Sockets, Server-Sent Events, Web Messaging, XMLHttpRequest).
+         </p>
+
+         <p>
+            The <dfn id="dom-networkservice-config"><code>config</code></dfn> attribute provides the raw configuration information extracted from the given network service.
+         </p>
+
+      </section>
+
+      <section>
+         <h3>States</h3>
+
+      <dl class="domintro">
+        <dt>
+          <var title="">service</var>
+           .
+          <code title="dom-networkservice-readystate">
+            <a href="#dom-networkservice-readystate">readyState</a>
+          </code>
+        </dt>
+        <dd>
+          <p>
+            Returns the current state.
+          </p>
+        </dd>
+      </dl>
+
+         A <a href="#networkservice"><code>NetworkService</code></a> object can be in several states. The <dfn id="dom-networkservice-readystate"><code>readyState</code></dfn> attribute MUST return the current state of the networked service,
+         which MUST be one of the following values:
+
+         <dl>
+           <dt>
+             <dfn id="dom-networkservice-AVAILABLE" title="dom-networkservice-AVAILABLE">
+               <code>AVAILABLE</code>
+             </dfn>
+              (numeric value
+             1)
+
+
+           </dt>
+           <dd>
+             <p>The object is connected to its service endpoint.
+
+            </p>
+           </dd>
+           <dt>
+             <dfn id="dom-networkservice-UNAVAILABLE" title="dom-networkservice-UNAVAILABLE">
+               <code>UNAVAILABLE</code>
+             </dfn>
+              (numeric value
+             2)
+           </dt>
+           <dd>
+             <p>The object is not connected to its service endpoint.
+            </p>
+           </dd>
+         </dl>
+
+      </section>
+
+      <section>
+         <h3>Events</h3>
+
+      <p>
+         The following are the event handlers (and their corresponding event handler event types) that must be supported, as IDL attributes, by all objects implementing the
+         <a href="#networkservice"><code>NetworkService</code></a> interface:
+       </p>
+
+       <table border="1">
+        <thead>
+          <tr>
+            <th>
+              <span title="event handlers">Event handler</span>
+            </th>
+            <th>
+              <span>Event handler event type</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <dfn id="dom-networkservice-onmessage" title="dom-NetworkService-onmessage">
+                <code>onmessage</code>
+              </dfn>
+            </td>
+            <td>
+              <code title="event-message">message</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <dfn id="dom-networkservice-onreadystatechange" title="dom-NetworkService-onreadystatechange">
+                <code>onreadystatechange</code>
+              </dfn>
+            </td>
+            <td>
+              <code title="event-onreadystatechange">readystatechange</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+         Events with an event type of <code>message</code> defined in this specification are <a href="http://dev.w3.org/html5/postmsg/#messageevent" class="externalDFN"><code>MessageEvent</code></a> objects as defined in [[!WEBMESSAGING]].
+      </p>
+
+      <p>
+         Events with an event type of <code>readystatechange</code> defined in this specification are simple <code>Event</code> objects.
+      </p>
+
+      </section>
+   </section>
+
+      <section>
+            <h2>Service Discovery</h2>
+
+      <p>
+         User agents conforming to this specification MUST implement both <acronym title="Simple Service Discovery Protocol">SSDP</acronym> [[!UPNP]] and Zeroconf [[!ZEROCONF]] service discovery mechanisms
+         to enable Web pages to request and connect with HTTP services running on networked devices, discovered via either mechanism, through this API.
+      </p>
+      <p>
+         This section presents how the results of these two service discovery
+         mechanisms will be matched to requested service types and how their properties will be applied to any resulting <a href="#networkservice"><code>NetworkService</code></a> objects.
+      </p>
+
+      <p>
+         It is expected that user agents will perform these service discovery mechansisms asynchronously and periodically update the <a>list of networked devices</a> as required. The timing of any
+         service discovery mechanisms is an implementation detail left to the discretion of the implementer (e.g. once on user agent start-up, every X seconds during user agent execution or on
+         invocation of this API from a Web page).
+      </p>
+
+      <p>
+         The <dfn>list of available service records</dfn> is a single dynamic internal lookup table within user agents that is used to track the current services available in the network at any given time.
+         At any point during the running of either of the two service discovery mechanisms then existing entries within this table can be updated, entries can be added and entries can be removed as the status of networked
+         services changes. Each record contained within this table contains the attributes: <code>id</code>, <code>name</code>, <code>type</code>, <code>url</code> and <code>config</code>.
+      </p>
+
+            <section>
+         <h4>Zeroconf (<acronym title="Multicast DNS">mDNS</acronym> + <acronym title="Domain Name System">DNS</acronym>-<acronym title="Service Discovery">SD</acronym>)</h4>
+
+         <p>
+            For each DNS response received from a user-agent-initiated Multicast DNS Browse for <acronym title="DNS Pointer Record">PTR</acronym> records with the name <code>_services._dns-sd._udp</code> on the resolved recommended automatic browsing
+   domain [[!MDNS]], the user agent MUST run the following steps:
+         </p>
+
+         <ol class="rule">
+
+            <li>Let <var>service mDNS responses</var> be an array of PTR records received by issuing a Multicast DNS Browse for PTR records with the name of the current discovered service type.</li>
+
+            <li>For each Object <var>service mDNS response</var> in <var>service mDNS responses</var>, run the following steps:
+               <ol>
+
+                  <li>
+                     Let <var>network service record</var> be an Object consisting of the following empty properties: <code>id</code>, <code>name</code>, <code>type</code>, <code>url</code>, <code>config</code>.
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>id</code> property to the value of the full PTR Service Instance Name [[!MDNS]].
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>name</code> property to the value of the PTR Service Instance Name's <var>Instance</var> component [[!MDNS]].
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>type</code> property to the value of the PTR Service Instance Name's <var>Service</var> component [[!MDNS]].
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>url</code> property to the resolvable Service URL obtained from performing an DNS-SD Lookup [[!DNS-SD]] of the current service from the PTR record provided [[!MDNS]].
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>config</code> property to the string value of the contents of the first DNS-SD TXT record associated with the <var>service mDNS response</var> as defined in [[!DNS-SD]].
+                  </li>
+
+                  <li>
+                     For each Object <var>existing service record</var> in the current <a>list of available service records</a>, run the following sub-steps:
+                     <ol class="rule">
+
+                       <li>
+                        If the <var>existing service record</var>'s <code>id</code> property matches the value of the <var>network service record</var>'s <code>id</code>, then set the
+                        value of <var>existing service record</var> in the current <a>list of available service records</a>  to the value of the
+                        <var>network service record</var> and skip the next step.
+                       </li>
+                     </ol>
+                  </li>
+
+                  <li>
+                     Add <var>network service record</var> to the <a>list of available service records</a>.
+                  </li>
+
+                  <li>
+                     For each non-garbage collected <a href="#networkservice"><code>NetworkService</code></a> object run the following steps:
+
+                     <ol class="rule">
+                        <li>
+                           If the <a href="#networkservice"><code>NetworkService</code></a> object was created from a <code>type</code> attribute but that attribute does not equal the
+                           current <a>network service record</a>'s <code>type</code> property then continue at the next available active
+                           <a href="#networkservice"><code>NetworkService</code></a> object.
+                        </li>
+                        <li>
+                           Increment the <code>servicesAvailable</code> attribute of the <a href="#networkservices"><code>NetworkServices</code></a> object by <code>1</code>.
+                        </li>
+                     </ol>
+                  </li>
+            </ol>
+           </li>
+         </ol>
+
+      </section>
+
+      <section>
+         <h5>Universal Plug-and-Play (<acronym title="Universal Plug-and-Play">UPnP</acronym>)</h5>
+
+         <p>
+            For each SSDP Presence Announcement [[!UPNP]] - a HTTP NOTIFY request - received from a user-agent-initiated SSDP Discovery Request [[!UPNP]], the user agent MUST run the following steps:
+         </p>
+
+         <ol class="rule">
+            <li>
+               Let <var>ssdp device</var> be an Object with a property for each HTTP header received in the received SSDP Presence Announcement, with each key being the name of a HTTP header and its
+               value being that HTTP header's accompanying value.
+            </li>
+
+            <li>
+               If <var>ssdp device</var> does not contain at least one <var>NTS</var>, <var>USN</var> and <var>Location</var> parameter, then the user agent MUST abort these steps.
+            </li>
+
+            <li>
+               If the first occurrence of <var>NTS</var> has a value other than <code>ssdp:alive</code>, then continue to the step labeled <var>update service monitor</var> below.
+            </li>
+
+            <li>
+               Let <var>root device descriptor file</var> contain the contents of the file located at the URL provided in the first occurrence of <var>Location</var> obtained according to the rules
+               defined in the section 'Retrieving a description using HTTP' [[!UPNP]].
+            </li>
+
+            <li>
+               If <var>root device descriptor file</var> is empty, then the user agent MUST abort these steps.
+            </li>
+
+            <li>
+               Let <var>advertised services</var> be a <a>list of all advertised services</a> obtained from the <var>root device descriptor file</var> containing all sub-nodes of the <code>serviceList</code> node as described in
+               the section 'Device Description' [[!UPNP]].
+            </li>
+
+            <li>
+               For each Object <var>advertised service</var> in <var>advertised services</var> run the following steps:
+               <ol class="rule">
+
+                  <li>
+                     Let <var>network service record</var> be an Object consisting of the following empty properties: <code>id</code>, <code>name</code>, <code>type</code>, <code>url</code>, <code>eventsUrl</code>, <code>config</code>.
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>id</code> property to the string value of the first occurrence of the <var>USN</var> property.
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>name</code> property to the string value of the first occurrence of the <var>service</var>'s <code>serviceId</code> property.
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>type</code> property to the string value of the first occurrence of the <var>service</var>'s <code>serviceType</code> property.
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>url</code> property to the string value of the first occurrence of the <var>service</var>'s <code>controlURL</code> property.
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>config</code> property to the string value of the first occurrence of the <var>device</var> property.
+                  </li>
+
+                  <li>
+                     If <var>service</var>'s <code>eventSubURL</code> property is empty, then continue to the step labeled <em>register</em> below.
+                  </li>
+
+                  <li>
+                     Set <var>network service record</var>'s <code>eventsUrl</code> property to the string value of the first occurrence of the <var>service</var>'s <code>eventSubURL</code> property.
+                  </li>
+
+                  <li>
+                     <em>Register</em>: For each Object <var>existing service record</var> in the current <a>list of available service records</a>, run the following sub-steps:
+                     <ol class="rule">
+
+                       <li>
+                        If the <var>existing service record</var>'s <var>id</var> property matches the value of the first occurrence of <var>USN</var> and the
+                        <var>existing service record</var>'s <code>type</code> property matches the value of <var>network service record</var>'s <code>type</code>, then set the
+                        value of <var>existing service record</var> in the current <a>list of available service records</a>  to the value of the
+                        <var>network service record</var> and skip the next step.
+                       </li>
+                     </ol>
+                  </li>
+
+                  <li>
+                     Add <var>network service record</var> to the <a>list of available service records</a>.
+                  </li>
+
+               </ol>
+            </li>
+            <li>
+               <em>Update Service Monitor</em>: For each non-garbage collected <a href="#networkservice"><code>NetworkService</code></a> object run the following steps:
+
+               <ol class="rule">
+                  <li>
+                     If this <a href="#networkservice"><code>NetworkService</code></a> object was created from a <code>type</code> attribute but that attribute does not equal the
+                     current <a>network service record</a>'s <code>type</code> property then continue at the next available active
+                     <a href="#networkservice"><code>NetworkService</code></a> object.
+                  </li>
+                  <li>
+                     If the <var>announcement type</var> equals <code>ssdp:alive</code> then Increment the <code>servicesAvailable</code> attribute of the <a href="#networkservices"><code>NetworkServices</code></a>
+                     object by <code>1</code>. Otherwise, decrement the <code>servicesAvailable</code> attribute of the <a href="#networkservices"><code>NetworkServices</code></a>
+                     object by <code>1</code>.
+                  </li>
+               </ol>
+            </li>
+         </ol>
+
+         <p>
+            A <dfn>user-agent generated callback url</dfn> is a Local-network accessible URL endpoint that a user agent must generate and maintain for receiving HTTP NOTIFY requests from UPnP Event sources.
+         </p>
+
+         <p>When the user agent is to <dfn>setup a UPnP Events Subscription</dfn>, it is to run the following steps with the current <var>network service record</var> object:</p>
+
+         <ol class="rule">
+            <li>
+               If <var>network service record</var>'s <code>eventsUrl</code> property is empty then the user agent MUST abort these steps.
+            </li>
+
+            <li>
+               Let <var>callback URL</var> be the value of creating a new <a>user-agent generated callback url</a>.
+            </li>
+
+            <li>
+               Send a HTTP SUBSCRIBE request with a <em>NT</em> header with a string value of <code>upnp:event</code>, a <em>TIMEOUT</em> header with an integer value of
+               <code>86400</code> and a <em>CALLBACK</em> header
+               with a string value of <var>callback URL</var> towards the <var>network service record</var>'s <code>eventsUrl</code> property.
+            </li>
+
+            <li>
+               If a non-200 OK response is received from the HTTP SUBSCRIBE request then the user agent MUST abort these steps.
+            </li>
+
+            <li>
+               On receiving a valid 200 OK response, run the following steps:
+
+               <ol class="rule">
+                  <li>
+                     Let <var>callback ID</var> equal the string value of the first included <em>SID</em> header, if it exists.
+                  </li>
+                  <li>
+                     Let <var>timeout date</var> equal the sum of the current UTC date value plus the integer value of the first included <em>TIMEOUT</em> header, if it exists.
+                  </li>
+                  <li>
+                     Run the following steps aynchronously and continue to the step labeled <em>listen</em> below.
+                  </li>
+                  <li>
+                     <em>Refresh Subscription</em>: Run the following steps at a set interval (X) within the user agent:
+
+                     <ol class="rule">
+                        <li>
+                           Let <var>current date</var> equal the current UTC date.
+                        </li>
+                        <li>
+                           If <var>current date</var> is less than the <var>timeout date</var> then continue to the step labeled <em>refresh subscription</em> above.
+                        </li>
+                        <li>
+                           Send a HTTP SUBSCRIBE request with a <em>SID</em> header with the string value of <var>callback ID</var> and a <em>TIMEOUT</em> header
+                           with an integer value of <code>86400</code> towards the <var>network service record</var>'s <code>eventsUrl</code> property.
+                        </li>
+                        <li>
+                           On receiving a valid 200 OK, update <var>callback ID</var> with the string value of the first included <em>SID</em> header, if it exists. All other HTTP
+                           responses should cause the user agent to continue from the step labeled <em>refresh subscription</em> above.
+                        </li>
+                     </ol>
+
+                  </li>
+
+                  <li>
+                     <em>Listen</em>: For each HTTP NOTIFY request received at the <var>callback URL</var> the user agent is to run the following steps:
+
+                     <ol class="rule">
+                        <li>
+                           Let <var>content clone</var> be the result of obtaining the message body of the HTTP NOTIFY request. If <var>content clone</var> is empty, then the user agent MUST abort these steps.
+                        </li>
+                        <li>
+                          Create a new <code>message</code> event that uses the <a href="http://dev.w3.org/html5/postmsg/#messageevent" class="externalDFN"><code>MessageEvent</code></a> interface [[!WEBMESSAGING]], with the name <code>message</code>,
+                           which does not bubble, is not cancelable, and has no default action.
+                        </li>
+                        <li>
+                           Let the <code>data</code> attribute of the event have the DOMString value of <var>content clone</var>.
+                        </li>
+                        <li>
+                           <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/webappapis.html#queue-a-task" class="externalDFN">Queue a task</a> to
+                            dispatch the newly created event at the current <a><code>NetworkService</code></a> object.
+                        </li>
+                     </ol>
+                  </li>
+
+               </ol>
+
+            </li>
+         </ol>
+
+         </section>
+
+         <section>
+            <h3>Network Topology Monitoring</h3>
+
+                  <div>
+                     <p>
+                        When the <a>user agent</a> detects that the user has dropped from their connected network, then it MUST run the following steps:
+                     </p>
+
+                     <ol class="rule">
+                        <li>
+                           Flush all entries from the <a>list of available service records</a>.
+                        </li>
+                        <li>
+                           For each <a href="#networkservice"><code>NetworkService</code></a> object currently active in the <a>user agent</a> perform the following steps:
+
+                           <ol class="rule">
+                              <li>
+                                 Set the <a href="#dom-networkservice-readystate"><code>readyState</code></a> attribute to <code>2</code> (<a href="#dom-networkservice-UNAVAILABLE"><code>UNAVAILABLE</code></a>).
+                              </li>
+                              <li>
+                                 Create a new <code>readystatechange</code> event that uses the <code>Event</code> interface which does not bubble, is not cancelable, and has no default action.
+                              </li>
+                              <li>
+                                 <a href="http://www.whatwg.org/specs/web-apps/current-work/complete/webappapis.html#queue-a-task" class="externalDFN">Queue a task</a> to
+                                        dispatch the newly created event at the <a href="#networkservice"><code>NetworkService</code></a> object.
+                              </li>
+                           </ol>
+                        </li>
+                     </ol>
+
+                     <p>
+                        When the <a>user agent</a> detects that the user has connected to a new network, then it SHOULD run the following steps:
+                     </p>
+
+                     <ol class="rule">
+                        <li>
+                           Re-issue an mDNS search and SSDP discovery search and handle the responses according to the processing defined in <a href="#service-discovery">Section 6: Service Discovery</a>.
+                        </li>
+                     </ol>
+                  </div>
+         </section>
+      </section>
+
+   <section>
+      <h3>Garbage collection</h3>
+
+      <p>
+         A <a><code>NetworkService</code></a> object containing a <code>url</code> parameter currently in the <a>entry script origin's URL whitelist</a> MUST NOT be garbage collected.
+      </p>
+
+      <p>
+         Only when the user navigates away from the current browsing context can <a><code>NetworkService</code></a> objects be garbage-collected and records in the <a>entry script origin's URL whitelist</a> be removed.
+      </p>
+
+   </section>
+
+
+    <section>
+      <h3>Use Cases and Requirements</h3>
+
+      <p>This section covers what the requirements are for this API, as well as illustrates some use cases.</p>
+
+      <ul class="rule">
+         <li>
+            Once a user has given permission, user agents should provide the ability for Web pages to communicate directly with a Local-networked Service.
+            <ul class="rule">
+               <li>
+                  Example: A web-based TV remote control. A Web page wants to control the current user's TV, changing the programming shown or increasing/decreasing/muting the
+                  volume of the Local-networked Device. The Web page requests a service type that is known to be implemented by television sets to which it has the
+                  application logic to communicate. Local devices providing the request service types are discovered and presented to the user for authorization. The user selects one
+                  or more of the discovered television sets to be accessible to the current Web page and then clicks 'Share'. The Web page can now communicate directly with
+                  the user-authorized Local-networked services.
+               </li>
+            </ul>
+         </li>
+
+         <li>
+           Web pages should be able to communicate with Local-networked Services using the messaging channel supported by those Devices.
+           <ul class="rule">
+            <li>
+               Example: A Web page advertises that it is capable of controlling multiple Home Media Servers. The user can select their Home Media Server type from a drop-down list, at which point the
+               Web page sends a request to the user agent to connect with the associated service type of the Home Media Server. The Media Server selected implements a Web Socket channel for
+               bi-directional service communication and so the Web page opens a web socket to the requested Media Server and can communicate as required via that appropriate channel.
+            </li>
+           </ul>
+         </li>
+
+         <li>
+           Web pages should be able to communicate with Local-networked Services using the messaging format supported by those Devices.
+           <ul class="rule">
+            <li>
+               Example: A Web page advertises that it is capable of interacting with and controlling multiple types of Home Media Server. The user can select their Home Media Server type from a drop-down list or known Media Servers, at which point the
+               Web page sends a request to the user agent to connect with the associated service type (and, optionally, the associated event type) of the Home Media Server. The communiciation protocols supported by Home Media Servers typically vary
+               between UPnP, JSON-RPC, Protocol Buffers or other messaging formats depending on the Home Media Server requested. The Web page is able to communicate with the user-selected Home Media
+               Server in the messaging format supported by that Device, which, in this example is a simple key/value pair text format.
+            </li>
+           </ul>
+         </li>
+
+         <li>
+           Web pages should not be able to communicate with Local-networked Services that have not been authorized by the user thereby maintaining the user's privacy.
+           <ul class="rule">
+            <li>
+               Example: A Web page requests access to one type of Local-networked service. The user authorizes access to that particular service. Other services running on that same device, and on other devices
+               within the network, should not be accessible to the current Web page.
+            </li>
+           </ul>
+         </li>
+
+         <li>
+           A user should be able to share one or more Local-networked Services based on a particular service type request from a Web page.
+           <ul class="rule">
+            <li>
+               Example: A Web page is capable of interacting with a specific profile of Local-networked Service. As such, it makes a request to the user agent to access those services, of which multiple matches
+               are found. The user is capable of selecting one or more of the discovered services to share with the Web page. The Web page can then implement a drag-and-drop interface for the user to drag specific
+               actions on to one or more of the authorized Local-networked Services.
+            </li>
+           </ul>
+         </li>
+
+         <li>
+           User agents should provide an API exposed to script that exposes the features above. The user is notified by UI anytime interaction with Local-networked Services is requested, giving the user
+           full ability to cancel or abort the transaction. The user selects the Local-networked Services to be connected to the current Web page, and can cancel these at any time. No invocations to
+           these APIs occur silently without user intervention.
+         </li>
+      </ul>
+    </section>
+
+          <section class="informative appendix">
+             <h3>Examples</h3>
+
+           <div class="example">
+            <p>This sample code exposes a button. When clicked, this button is disabled and the user is prompted to offer a network service. The user may also select multiple network services. When the user has authorized a network service to be connected to the web page then the web page issues a simple command to get a list of all the albums stored on the connected media player service.
+    				<p>The button is re-enabled only when the connected network service disconnects for whatever reason (the service becomes unavailable on the network, the user disconnects from their current network or the user revokes access to the service from the current web page). At this point the user can re-click the button to select a new network service to connect to the web page and the above steps are repeated.</p>
+    				<p>The provided service type identifier and service interaction used in this example is based on the well-defined service type and messaging format supported by the <a href="http://xbmc.org/about/">XBMC Media Server</a>. </p>
+            <hr />
+            <pre class="brush:js">&lt;input type="button" value="Start" onclick="start()" id="startBtn"/&gt;
+&lt;div id="debugconsole">&lt;/div>
+
+&lt;script>
+ var startBtn = document.getElementById('startBtn'),
+     debug = document.getElementById('debugconsole');
+
+ function start() {
+   if(navigator.getNetworkServices) {
+      navigator.getNetworkServices('_xbmc-jsonrpc._tcp', gotXBMCService, error);
+      startBtn.disabled = true;
+   } else {
+      debug.innerHTML += "&lt;br&gt;Service Discovery API not supported!";
+   }
+ }
+
+ function gotXBMCService(servicesList) {
+
+   var services = servicesList.services;
+
+// Listen for service disconnect messages
+
+   services[0].addEventListener('readystatechange', function ( e ) {
+     if(services[0].readyState === services[0].UNAVAILABLE) {
+       debug.innerHTML += "&lt;br>" + services[0].name + " disconnected.";
+       startBtn.disabled = false;
+     }
+   }, false);
+
+// Send a service message to get albums list (and process the service response)
+
+   var svcXhr = new XMLHttpRequest();
+   svcXhr.open("POST", services[0].url + "/getAlbums"); // services[0].url and its subresources have been
+                                                        // whitelisted for cross-site XHR use in this
+                                                        // current browsing context.
+
+   svcXhr.setRequestHeader('Content-Type', 'application/json-rpc');
+
+   svcXhr.addEventListener('readystatechange', function ( response ) {
+     if( response.readyState != 4 || response.status != 200 )
+        return;
+     debug.innerHTML += "&lt;br>" + services[0].name + " response received: ";
+     debug.textContent += JSON.parse(response.responseText);
+   }, false);
+
+   var svcMsg = [
+     { "jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": { "genreid": -1,
+         "artistid": -1, "start": -1, "end": -1 }, "id": "1" }
+   ];
+
+   svcXhr.send(JSON.stringify(svcMsg));
+   debug.innerHTML += "&lt;br>" + services[0].name + " request sent: ";
+   debug.textContent += JSON.stringify(svcMsg);
+
+ }
+
+ function error( err ) {
+	 debug.innerHTML += "&lt;br>An error occurred obtaining a local network service.";
+	 startBtn.disabled = false;
+ }
+&lt;/script></pre>
+           </div>
+
+           <div class="example">
+            <p>
+             This sample exposes a drop-down list containing a number of common Home-based audio devices. When the user selects an audio device from the list provided, they are prompted to authorize a network service
+             based on the service type requested. The user may also select multiple network services matching the selected service type.
+             In this example, the user selects their make as being <var>Sony</var> and their model as being <var>Bravia S1000</var> from which the Web page can derive a service type
+             (<var>urn:schemas-upnp-org:device:MediaRenderer:1</var>).
+             <br /><br />Once the user has authorized the device, the web page sends a simple mute command according to the messaging format supported by the device.
+            </p>
+            <hr />
+            <pre class="brush:js">&lt;select name="make" id="make"&gt;
+  &lt;option selected="selected" disabled="disabled"&gt;Select make&lt;/option&gt;
+  &lt;option&gt;Sony&lt;/option&gt;
+  &lt;option&gt;Philips&lt;/option&gt;
+  &lt;option&gt;Alba&lt;/option&gt;
+&lt;/select&gt;
+&lt;select name="model" id="model"&gt;&lt;/select&gt;
+&lt;div id="debugconsole"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  var debug = document.getElementById('debugconsole');
+
+  var models = {
+    "Sony": [
+      {"name": "Bravia TV S1000", "servicetype": "urn:schemas-upnp-org:service:RenderingControl:1" },
+      {"name": "Bravia TV S2000", "servicetype": "_mediarenderer._http._tcp" },
+      {"name": "HiFi WD10", "servicetype": "urn:schemas-upnp-org:service:RenderingControl:1" }
+    ],
+    "Philips": [ /* ... */ ],
+    "Alba": [ /* ... */ ]
+  };
+
+  var makeEl = document.getElementById("make"),
+      modelEl = document.getElementById("model");
+
+  makeEl.addEventListener('change', function() {
+    modelEl.innerHTML = ""; // reset
+    var defaultOption = document.createElement("option");
+    defaultOption.textContent = "Select model";
+    defaultOption.setAttribute("disabled", "disabled");
+    defaultOption.setAttribute("selected", "selected");
+    modelEl.appendChild(defaultOption);
+    for(var i = 0, l = models[makeEl.value].length; i < l; i++) {
+      var option = document.createElement("option");
+      option.textContent = models[makeEl.value][i]["name"];
+      option.setAttribute("value", models[makeEl.value][i]["servicetype"]);
+      modelEl.appendChild(option);
+    }
+  }, false);
+
+  modelEl.addEventListener('change', function() {
+    if(navigator.getNetworkServices &&
+         modelEl.value == "urn:schemas-upnp-org:service:RenderingControl:1") {
+      navigator.getNetworkServices(modelEl.value, successCallback, errorCallback);
+    } else if (modelEl.value == "_mediarenderer._http._tcp") {
+      debug.innerHTML += "&lt;br&gt;Service type is not supported by this application.";
+    } else {
+      debug.innerHTML += "&lt;br&gt;Service Discovery API not supported!";
+    }
+  }, false);
+&lt;/script&gt;
+
+&lt;script&gt;
+  function successCallback( servicesList ) {
+
+  // Listen for service push messages
+
+    servicesList.services[0].addEventListener('message', function ( msg ) {
+         debug.innerHTML += "&lt;br>" + servicesList.services[0].name + " event received: ";
+         debug.textContent += msg.data;
+    }, false);
+
+ // Send a control signal to mute the service audio
+
+    var svcXhr = new XMLHttpRequest();
+    svcXhr.open("POST", servicesList.services[0].url); // servicesList.services[0].url and its
+                                                       // subresources have been whitelisted for
+                                                       // cross-site XHR use in this current
+                                                       // browsing context.
+
+    svcXhr.setRequestHeader('SOAPAction', 'urn:upnp-org:serviceId:RenderingControl#SetMute');
+    svcXhr.setRequestHeader('Content-Type', 'application/xml');
+
+    svcXhr.onreadystatechange = function ( response ) {
+      if( response.readyState != 4 || response.status != 200 )
+        return;
+      debug.innerHTML += "&lt;br&gt;" + servicesList.services[0].name + " response received: ";
+      debug.textContent += response.responseXML;
+    }
+
+    // Service messaging to mute the provided service
+    var svcMsg = '&lt;?xml version="1.0" encoding="utf-8"?&gt;' +
+                 '&lt;s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" ' +
+                   'xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"&gt;' +
+                   '&lt;s:Body&gt;' +
+                     '&lt;u:SetMute xmlns:u="urn:schemas-upnp-org:device:MediaRenderer:1"&gt;' +
+                       '&lt;InstanceID&gt;0&lt;/InstanceID&gt;' +
+                       '&lt;Channel&gt;Master&lt;/Channel&gt;' +
+                       '&lt;DesiredMute&gt;true&lt;/DesiredMute&gt;' +
+                     '&lt;/u:SetMute&gt;' +
+                   '&lt;/s:Body&gt;' +
+                 '&lt;/s:Envelope&gt;';
+
+    svcXhr.send(svcMsg);
+    debug.innerHTML += "&lt;br&gt;" + servicesList.services[0].name + " request sent: ";
+    debug.textContent += svcMsg;
+  }
+
+  function errorCallback( error ) {
+    debug.innerHTML += "&lt;br&gt;An error occurred: " + error.code;
+  }
+&lt;/script&gt;</pre>
+          </div>
+
+       </section>
+
+    <section>
+      <h3>Acknowledgements</h3>
+
+      <p>Thanks are expressed by the editor to the following individuals for their feedback on this specification to date (in alphabetical order):
+      <br /><br />
+      Lars-Erik Bolstad, Hari G Kumar, Bob Lund, Giuseppe Pascale, Marcin Simonides, Clarke Stevens, Christian S&ouml;derstr&ouml;m, Mark Vickers, ...</p>
+
+      <p>Thanks are also expressed by the editor to the following organizations and groups for their support in producing this specification to date (in alphabetical order):
+      <br /></br />
+      CableLabs, Opera Software ASA, W3C Device APIs Working Group, W3C Web and TV Interest Group, ...</p>
+    </section>
+
+    <script class='remove'>
+    if(SyntaxHighlighter) {
+      SyntaxHighlighter.defaults['gutter'] = false;
+      SyntaxHighlighter.defaults['toolbar'] = false;
+      SyntaxHighlighter.all()
+    }
+    </script>
+
+</body>
+</html>
