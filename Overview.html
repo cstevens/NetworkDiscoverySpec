@@ -577,7 +577,7 @@ navigator.getNetworkServices([
      <h2>Requesting networked services</h2>
 
 
-<pre class="widl" style="background-color: yellow;">
+<pre class="widl">
 module window {
     
     interface [
@@ -640,36 +640,6 @@ module window {
 }
 </pre>
 
-    
-<pre class="widl" style="background-color: yellow;">  
-[This is the old IDL that should be removed.]
-    
-    [Supplemental, NoInterfaceObject]
-interface <dfn id="navigatornetworkservice">NavigatorNetworkService</dfn> {
-  // Obtain a Local-networked Service
-  void <a href="#dom-navigator-getnetworkservices">getNetworkServices</a>( in any type,
-                           in <a href="#navigatornetworkservicesuccesscallback">NavigatorNetworkServiceSuccessCallback</a> successCallback,
-                           in optional <a href="#navigatornetworkserviceerrorcallback">NavigatorNetworkServiceErrorCallback</a> errorCallback );
-};
-<a class="externalDFN" href="http://www.whatwg.org/specs/web-apps/current-work/complete/timers.html#navigator">Navigator</a> implements <a href="#navigatornetworkservice">NavigatorNetworkService</a>;
-
-[Callback=FunctionOnly, NoInterfaceObject]
-interface <dfn id="navigatornetworkservicesuccesscallback">NavigatorNetworkServiceSuccessCallback</dfn> {
-  void handleEvent( in <a href="#networkservices">NetworkServices</a> services );
-};
-
-[NoInterfaceObject]
-interface <dfn id="navigatornetworkserviceerror">NavigatorNetworkServiceError</dfn> {
-  const unsigned short <a href="#dom-navigatornetworkserviceerror-permission_denied">PERMISSION_DENIED_ERR</a> = 1;
-  readonly attribute unsigned short <a href="#dom-navigatornetworkserviceerror-code">code</a>;
-};
-
-[Callback=FunctionOnly, NoInterfaceObject]
-interface <dfn id="navigatornetworkserviceerrorcallback">NavigatorNetworkServiceErrorCallback</dfn> {
-  void handleEvent( in <a href="#navigatornetworkserviceerror">NavigatorNetworkServiceError</a> error );
-};
-</pre>
-
   <section>
    <h2>Methods</h2>
 
@@ -725,14 +695,6 @@ interface <dfn id="navigatornetworkserviceerrorcallback">NavigatorNetworkService
           </p>
 
           <ol class="rule">
-            <li style="background-color: yellow;">
-               If <var>successCallback</var> is empty or is not an object of type <code>Function</code> then the user agent MUST abort these steps. [This step is not needed. successCallback is required.]
-            </li>
-
-            <li style="background-color: yellow;">
-               If <var>type</var> is an array consisting of one or more <a>valid service type</a> tokens, then let <var>requested control types</var> by the value of <var>type</var>  and continue to the step labeled <em>process</em> below. [This should be deleted. We can make multiple calls to get all types.]
-            </li>
-
             <li>
                If <var>type</var> is a string consisting of one <a>valid service type</a> token, then let <var>requested control types</var> be an array containing one item with a value of <var>type</var> and continue to the step labeled <em>process</em> below.
             </li>
@@ -749,7 +711,7 @@ interface <dfn id="navigatornetworkserviceerrorcallback">NavigatorNetworkService
                For each <var>available service</var> in the <a>list of available service records</a> run the following steps:
                <ol class="rule">
                   <li>
-                    For each <var>requested <span style="background-color: yellow;">service</span> type</var> in <var>requested <span style="background-color: yellow;">service</span> types</var>: If <var>available service</var>'s <code>type</code> attribute equals the <var>requested <span style="background-color: yellow;">service</span> type</var> then let <var>matched service</var> equal the value of <var>available service</var> and continue at the step labeled <var>attach</var> below.
+                    For each <var>requested service type</var> in <var>requested service types</var>: If <var>available service</var>'s <code>type</code> attribute equals the <var>requested service type</var> then let <var>matched service</var> equal the value of <var>available service</var> and continue at the step labeled <var>attach</var> below.
                   </li>
                   <li>
                      Continue at the next <var>available service</var>.
@@ -815,15 +777,11 @@ interface <dfn id="navigatornetworkserviceerrorcallback">NavigatorNetworkService
             </li>
 
             <li>
-               <span style="background-color: yellow;">[Services manager removed]</span> Create a new <a href="#networkservices"><code>NetworkServices</code></a> object.
+               Create a new <a href="#networkservices"><code>NetworkServices</code></a> object.
             </li>
 
             <li>
-               <span style="background-color: yellow;">[Remove this] Set <var>NetworkServices</var>'s <code>services</code> attribute to <var>services</var>.</span>
-            </li>
-
-            <li>
-               Set <span style="background-color: yellow;">NetworkServices</span> <code>servicesAvailable</code> attribute to the length of <var>services</var>.
+               Set NetworkServices <code>servicesAvailable</code> attribute to the length of <var>services</var>.
             </li>
 
             <li>
@@ -895,7 +853,7 @@ interface <dfn id="navigatornetworkserviceerrorcallback">NavigatorNetworkService
         <dd>
           <p>
             Returns the current error's error code. At this time, this will always be 1 or 2, for which the constants
-            <a href="#dom-navigatornetworkserviceerror-permission_denied"><code>PERMISSION_DENIED_ERR</code></a> and <a href="#dom-navigatornetworkserviceerror-bad_type_parameter" style="background-color: yellow;"><code>BAD_TYPE_PARAMETER</code></a> are defined.
+            <a href="#dom-navigatornetworkserviceerror-permission_denied"><code>PERMISSION_DENIED_ERR</code></a> and <a href="#dom-navigatornetworkserviceerror-bad_type_parameter"><code>BAD_TYPE_PARAMETER</code></a> are defined.
           </p>
         </dd>
       </dl>
@@ -914,7 +872,7 @@ interface <dfn id="navigatornetworkserviceerrorcallback">NavigatorNetworkService
             </dd>
          </dl>
 
-          <dl style="background-color: yellow;">
+          <dl>
               <dt>
                   <dfn id="dom-navigatornetworkserviceerror-bad_type_parameter" title="dom-navigatornetworkserviceerror-bad_type_parameter"><code>BAD_TYPE_PARAMETER_ERR</code></dfn> (numeric value 2)
               </dt>
@@ -930,10 +888,10 @@ interface <dfn id="navigatornetworkserviceerrorcallback">NavigatorNetworkService
       <h2>Obtaining networked services</h2>
 
       <p>
-         The <a href="#networkservices" style="background-color: yellow;"><code>NavigatorNetworkServices</code></a> interface is the top-level response object from a call to <a href="#dom-navigator-getnetworkservices"><code>getNetworkServices()</code></a> and provides a set of user-authorized <a href="#networkservice" style="background-color: yellow;"><code>NavigatorNetworkService</code></a> objects for the given request.
+         The <a href="#networkservices"><code>NavigatorNetworkServices</code></a> interface is the top-level response object from a call to <a href="#dom-navigator-getnetworkservices"><code>getNetworkServices()</code></a> and provides a set of user-authorized <a href="#networkservice"><code>NavigatorNetworkService</code></a> objects for the given request.
       </p>
 
-<pre class="widl" style="background-color: yellow;">
+<pre class="widl">
 module window {
     interface [
         CustomMarkFunction
@@ -947,21 +905,6 @@ module window {
         readonly attribute unsigned short servicesAvailable;
     };
 }
-</pre>
-          
-<pre class="widl" style="background-color: yellow;">
-[This is the old IDL that should be removed.]
-    
-[NoInterfaceObject]
-interface <dfn id="networkservices">NetworkServices</dfn> {
-  readonly attribute <a href="#networkservice">NetworkService</a>[] <a href="#dom-networkservices-services">services</a>;
-
-  // event handler attributes
-           attribute Function         <a href="#dom-networkservices-onserviceavailable">onserviceavailable</a>;
-           attribute Function         <a href="#dom-networkservices-onserviceunavailable">onserviceunavailable</a>;
-
-  readonly attribute unsigned short   <a href="#dom-networkservices-servicesavailable">servicesAvailable</a>;
-};
 </pre>
 
       <section>
@@ -1029,18 +972,18 @@ interface <dfn id="networkservices">NetworkServices</dfn> {
          The following are the event handlers (and their corresponding event handler event types) that must be supported, as IDL attributes, by all objects implementing the <a href="#networkservices"><code>NetworkServices</code></a> interface:
        </p>
           
-    <p style="background-color: yellow;">
+    <p>
           Events are set up through the Navigator object.
     </p>
-    <p style="background-color: yellow;">
+    <p>
         <code>Navigator.onNetworkServices()</code> sets up callbacks that are called when devices are added or removed.
     </p>
 
-    <p style="background-color: yellow;">
+    <p>
           <code>Navigator.onNetworkEvent()</code> sets up a callback that is called when services generate events. The argument is:
     </p>
 
-<pre class="widl" style="background-color: yellow;">
+<pre class="widl">
 module window {
     interface [
         CustomMarkFunction
@@ -1057,10 +1000,6 @@ module window {
 }
 </pre>
       
-<p style="background-color: yellow;">
-    [The table containing <code>onserviceunavailable</code> and <code>serviceunavailable</code> were removed here.]
-</p>
-          
       </section>
 
     </section>
@@ -1068,10 +1007,10 @@ module window {
     <h2>Communicating with a networked service</h3>
 
 <p>
-   The <a href="#navigatornetworkservice" style="background-color: yellow;"><code>NavigatorNetworkService</code></a> interface is used to provide a set of connection information for an HTTP service endpoint and if available, service events, running on a networked device.
+   The <a href="#navigatornetworkservice"><code>NavigatorNetworkService</code></a> interface is used to provide a set of connection information for an HTTP service endpoint and if available, service events, running on a networked device.
 </p>
 
-<pre class="widl" style="background-color: yellow;">
+<pre class="widl"">
 module window {
     interface [
         CustomMarkFunction
@@ -1085,27 +1024,6 @@ module window {
 }
 </pre>
         
-<pre class="widl" style="background-color: yellow;">
-[This is the old IDL that should be removed.]
-    
-[NoInterfaceObject]
-interface <dfn id="networkservice">NetworkService</dfn> {
-  readonly attribute DOMString        <a href="#dom-networkservice-name">name</a>;
-  readonly attribute DOMString        <a href="#dom-networkservice-type">type</a>;
-  readonly attribute DOMString        <a href="#dom-networkservice-url">url</a>;
-  readonly attribute DOMString        <a href="#dom-networkservice-config">config</a>;
-
-  const unsigned short <a href="#dom-networkservice-AVAILABLE">AVAILABLE</a>      = 1;
-  const unsigned short <a href="#dom-networkservice-UNAVAILABLE">UNAVAILABLE</a>    = 2;
-  readonly attribute unsigned short   <a href="#dom-networkservice-readystate">readyState</a>;
-
-  // event handler attributes
-           attribute Function         <a href="#dom-networkservice-onreadystatechange">onreadystatechange</a>;
-           attribute Function?        <a href="#dom-networkservice-onmessage">onmessage</a>;
-};
-<a href="#networkservice">NetworkService</a> implements <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-EventTarget" class="externalDFN">EventTarget</a>;
-</pre>
-
 <section>
   <h2>Attributes</h2>
 
@@ -1146,14 +1064,14 @@ interface <dfn id="networkservice">NetworkService</dfn> {
             The control URL endpoint (including any required port information) of the user-selected control service that has been added to the <a>entry script origin's URL whitelist</a>.
           </p>
         </dd>
-        <dt style="background-color: yellow;">
+        <dt>
           <var title="">service</var>
            .
           <code title="dom-networkservice-config">
             <a href="#dom-networkservice-config">uuid</a>
           </code>
         </dt>
-        <dd style="background-color: yellow;">
+        <dd>
           <p>
             The unique id of the device.
           </p>
@@ -1173,26 +1091,22 @@ interface <dfn id="networkservice">NetworkService</dfn> {
             endpoint for the service that has been added to the <a>entry script origin's URL whitelist</a>. Web pages can subsequently use this value for implicit cross-document messaging via various existing mechanisms (e.g. Web Sockets, Server-Sent Events, Web Messaging, XMLHttpRequest).
          </p>
 
-         <p style="background-color: yellow;">
+         <p>
             The <dfn id="dom-networkservice-config"><code>uuid</code></dfn> attribute provides the unique id of the device.
          </p>
 
       </section>
         
-        <p style="background-color: yellow;">
-        [Previous sections on readyState and Events removed. All objects are passed by value, not reference, so readyState would not work.]
-        </p>
-
    </section>
 
       <section>
           <h2>Communicating with a Zeroconf (mDNS + DNS-SD)networked service</h3>
               
               <p>
-              The Zeroconf <a href="#zeroconfnavigatornetworkservice" style="background-color: yellow;"><code>NavigatorNetworkService</code></a> object has the same members as the UPnP NavigatorNetworkService object and is as follows:
+              The Zeroconf <a href="#zeroconfnavigatornetworkservice"><code>NavigatorNetworkService</code></a> object has the same members as the UPnP NavigatorNetworkService object and is as follows:
               </p>
               
-              <pre class="widl" style="background-color: yellow;">
+              <pre class="widl">
 module window {
     interface [
         CustomMarkFunction
@@ -1206,7 +1120,7 @@ module window {
 }
               </pre>
               
-              <section style="background-color: yellow;">
+              <section>
                   <h2>Attributes</h2>
                   
                   <dl class="domintro">
@@ -1273,7 +1187,7 @@ module window {
                   endpoint for the service that has been added to the <a>entry script origin's URL whitelist</a>. Web pages can subsequently use this value for implicit cross-document messaging via various existing mechanisms (e.g. Web Sockets, Server-Sent Events, Web Messaging, XMLHttpRequest).
                   </p>
                   
-                  <p style="background-color: yellow;">
+                  <p>
                   The <dfn id="dom-networkservice-config"><code>uuid</code></dfn> attribute provides the unique id of the device.
                   </p>
                   
