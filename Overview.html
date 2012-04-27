@@ -1623,11 +1623,110 @@ module window {
           <section class="informative appendix">
              <h3>Examples</h3>
 
-              <div class="example" style="background-color: yellow;">
-                  <p>This sample code demonstrates the updated APIs.
-                  </p>
-                  <hr />
-                  Put sample code here...
+              <div class="example">
+                <p>This sample code demonstrates the updated APIs.
+                </p>
+                <hr />
+                    <pre class="brush:js">
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+&lt;html>
+    &lt;head>
+    &lt;title>Test DLNA&lt;/title>
+    
+    &lt;script type="text/javascript">
+	
+        function UPnPServAddCallback()
+        {
+            window.console.log("UPnPServAddCallback() called...");
+        }
+    
+        function UPnPServRemCallback(narNetworkSrv)
+        {
+            window.console.log("UPnPServRemCallback() called..." + narNetworkSrv.length);
+        }
+    
+        function zcServAddCallback()
+        {
+            window.console.log("zcServAddCallback() called...");
+        }
+	
+        function zcServRemCallback(narNetworkSrv)
+        {
+            window.console.log("zcServRemCallback() called..." + narNetworkSrv.length);
+        }
+	
+        function UPnPEventCallback(UPnPEvent)
+        {
+            window.console.log("UPnPEventCallback() name: "+UPnPEvent.friendlyName);
+        }
+    
+        function NSCallback(narNetworkSrv)
+        {
+            var len = narNetworkSrv.length;
+            window.console.log("NSCallback() RESP: len = "+len);
+    
+            if (len>0)
+            {
+                var srv = narNetworkSrv.item(1);
+                window.console.log("NSCallback() urls[1]: "+srv.url);
+            }
+        }
+	
+        function ERCallback(err)
+        {
+            window.console.log("ERCallback(): Error found: "+err.code);
+        }
+	
+        function zcNSCB(narNetworkSrv)
+        {
+            var len = narNetworkSrv.length;
+            window.console.log("zcNSCB() RESP: len = "+len);
+            
+            if (len>0)
+            {
+                var srv = narNetworkSrv.item(0);
+                window.console.log("zcNSCB():  urls[0]: "+srv.url);
+            }
+        }
+	
+        function getNS(type)
+        {
+            navigator.onNetworkEvent(type, UPnPEventCallback, ERCallback);
+            navigator.onNetworkServices(type, UPnPServAddCallback, UPnPServRemCallback, ERCallback);
+            navigator.getNetworkServices(type, NSCallback, ERCallback);
+        }
+    
+        function zcGetNS(type)
+        {
+            navigator.onNetworkServices(type, zcServAddCallback, zcServRemCallback, ERCallback);
+            navigator.getNetworkServices(type, zcNSCB, ERCallback);
+        }
+    
+        function xhr()
+        {
+            var xhr = new XMLHttpRequest();
+    
+            xhr.open("GET", "data2.xml", true);
+            xhr.send(null);
+            xhr.onreadystatechange = function(event) {
+            if (xhr.readyState == 4) {
+            var xml = xhr.responseText;
+            alert("XML: "+xml);
+        }
+    &lt;/script>
+    
+    &lt;/head>
+    
+    &lt;body>
+        &lt;h1>Test DLNA&lt;/h1>
+        &lt;br/>
+        &lt;input type='button' value='UPnP: getNetworkServices' 
+            onclick='getNS("upnp:urn:schemas-upnp-org:service:ContentDirectory:1");'>
+        &lt;input type='button' value='ZeroConf: getNetworkServices' onclick='zcGetNS("zeroconf:_daap");'>
+        &lt;input type='button' value='xhrRequest' onclick='xhr();'>
+    &lt;/body>
+&lt;/html>
+                </pre>
               </div>
               
            <div class="example">
